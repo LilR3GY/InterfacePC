@@ -17,9 +17,9 @@ class ComGUI():
         self.frame_title = CTkLabel(self.frame, text="Com Manager", 
                                     font=CTkFont("Arial", size=20, weight='bold'))
         self.label_com = CTkLabel(
-            self.frame, text="Available Port(s): ", width=15, anchor="w")
+            self.frame, text="Available Port(s): ", width=15)
         self.label_bd = CTkLabel(
-            self.frame, text="Baude Rate: ", width=15, anchor="w")
+            self.frame, text="Baude Rate: ", width=15)
         self.ComOptionMenu()
         self.baudOptionMenu()
         self.btn_refresh = CTkButton(self.frame, text="Refresh",
@@ -31,9 +31,9 @@ class ComGUI():
         self.publish()
 
     def publish(self):
-        self.frame.grid(row=0, column=0, rowspan=4,
-                        sticky="nsew")
-        self.frame_title.grid(row=0, column=0)
+        self.frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        self.frame.grid_rowconfigure(4, weight=1)
+        self.frame_title.grid(row=0, column=0, padx=20, pady=(10, 5))
         self.label_com.grid(column=0, row=2)
         self.label_bd.grid(column=0, row=3)
         self.drop_baud.grid(column=2, row=3, padx=self.padx, pady=self.pady)
