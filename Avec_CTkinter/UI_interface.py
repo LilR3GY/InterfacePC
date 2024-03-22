@@ -1,37 +1,41 @@
-from customtkinter import CTk, CTkFrame, CTkLabel, CTkButton, CTkOptionMenu
-import customtkinter
+from customtkinter import *
 
 class RootGUI():
-    def init(self, root):
-        self.root = customtkinter.CTk()
+    def __init__(self):
+        self.root = CTk()
         self.root.title("Serial communication")
-        self.root.geometry("360x120")
+        self.root.geometry("1100x580")
+        self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_columnconfigure((2, 3), weight=0)
+        self.root.grid_rowconfigure((0, 1, 2), weight=1)
         self.root.config(bg="white")
 
 class ComGUI():
-    def init(self, root):
+    def __init__(self, root):
         self.root = root
-        self.frame = CTkFrame(root, text="Com Manager",
-                              padx=5, pady=5, bg="white")
+        self.frame = CTkFrame(root, width=140, corner_radius=0)
+        self.frame_title = CTkLabel(self.frame, text="Com Manager", 
+                                    font=CTkFont("Arial", size=20, weight='bold'))
         self.label_com = CTkLabel(
-            self.frame, text="Available Port(s): ", bg="white", width=15, anchor="w")
+            self.frame, text="Available Port(s): ", width=15, anchor="w")
         self.label_bd = CTkLabel(
-            self.frame, text="Baude Rate: ", bg="white", width=15, anchor="w")
+            self.frame, text="Baude Rate: ", width=15, anchor="w")
         self.ComOptionMenu()
         self.baudOptionMenu()
         self.btn_refresh = CTkButton(self.frame, text="Refresh",
-                                     width=10,  command=self.com_refresh)
+                                    width=10,  command=self.com_refresh)
         self.btn_connect = CTkButton(self.frame, text="Connect",
-                                     width=10, state="disabled",  command=self.serial_connect)
+                                    width=10, state="disabled",  command=self.serial_connect)
         self.padx = 20
         self.pady = 5
         self.publish()
 
     def publish(self):
-        self.frame.grid(row=0, column=0, rowspan=3,
-                        columnspan=3, padx=5, pady=5)
-        self.label_com.grid(column=1, row=2)
-        self.label_bd.grid(column=1, row=3)
+        self.frame.grid(row=0, column=0, rowspan=4,
+                        sticky="nsew")
+        self.frame_title.grid(row=0, column=0)
+        self.label_com.grid(column=0, row=2)
+        self.label_bd.grid(column=0, row=3)
         self.drop_baud.grid(column=2, row=3, padx=self.padx, pady=self.pady)
         self.drop_com.grid(column=2, row=2, padx=self.padx)
         self.btn_refresh.grid(column=3, row=2)
@@ -39,11 +43,10 @@ class ComGUI():
 
     def ComOptionMenu(self):
         coms = ["-", "COM3"]
-        self.clicked_com = CTk.StringVar()
+        self.clicked_com = StringVar()
         self.clicked_com.set(coms[0])
         self.drop_com = CTkOptionMenu(
-            self.frame, self.clicked_com, *coms, command=self.connect_ctrl)
-        self.drop_com.config(width=10)
+            self.frame, values=coms, width=10, command=self.connect_ctrl)
 
     def baudOptionMenu(self):
         bds = ["-",
@@ -62,11 +65,10 @@ class ComGUI():
                "115200",
                "128000",
                "256000"]
-        self.clicked_bd = CTk.StringVar()
+        self.clicked_bd = StringVar()
         self.clicked_bd.set(bds[0])
         self.drop_baud = CTkOptionMenu(
-            self.frame, self.clicked_bd, *bds, command=self.connect_ctrl)
-        self.drop_baud.config(width=10)
+            self.frame, values=bds, width=10, command=self.connect_ctrl)
 
     def connect_ctrl(self, widget):
         print("Connect ctrl")
